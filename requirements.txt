@@ -1,0 +1,21 @@
+# requirements.txt
+
+# Core
+requests
+python-dotenv
+selenium
+google-search-results
+Flask
+flask-cors
+# Database
+mysql-connector-python
+
+# AI & Machine Learning
+google-generativeai
+sentence-transformers
+faiss-cpu
+numpy
+pandas
+scikit-learn
+nltk
+torch

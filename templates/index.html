@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Celestial Post Generator for LinkedIn</title>
+    <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --glow-color-1: rgba(59, 130, 246, 0.5);
+            --glow-color-2: rgba(139, 92, 246, 0.5);
+            --glow-color-3: rgba(236, 72, 153, 0.4);
+            --bg-color: #020010;
+            --surface-color: rgba(255, 255, 255, 0.05);
+            --border-color: rgba(255, 255, 255, 0.1);
+            --text-color: #e2e8f0;
+            --text-muted-color: #94a3b8;
+            --brand-gradient: linear-gradient(120deg, #3b82f6, #8b5cf6, #ec4899);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* --- Celestial Animated Background --- */
+        .celestial-background {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .celestial-background::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 20%, var(--glow-color-1) 0%, transparent 35%),
+                radial-gradient(circle at 80% 30%, var(--glow-color-2) 0%, transparent 35%),
+                radial-gradient(circle at 50% 80%, var(--glow-color-3) 0%, transparent 35%);
+            animation: rotateBackground 60s linear infinite;
+            transform-origin: center center;
+        }
+        
+        @keyframes rotateBackground {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        .stars {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                radial-gradient(1px 1px at 25% 15%, white, transparent),
+                radial-gradient(1px 1px at 55% 45%, white, transparent),
+                radial-gradient(2px 2px at 85% 65%, white, transparent),
+                radial-gradient(1px 1px at 10% 80%, white, transparent),
+                radial-gradient(1px 1px at 40% 90%, white, transparent);
+        }
+
+        /* --- Main Content Container --- */
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 900px;
+            width: 100%;
+        }
+
+        .main-content {
+            background: var(--surface-color);
+            backdrop-filter: blur(40px);
+            -webkit-backdrop-filter: blur(40px);
+            border-radius: 24px;
+            padding: 60px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3), 
+                        inset 0 0 1px rgba(255, 255, 255, 0.1);
+            animation: slideInFromBottom 1s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+            opacity: 0;
+        }
+
+        @keyframes slideInFromBottom {
+            from {
+                opacity: 0;
+                transform: translateY(50px) scale(0.98);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* --- Header & Logo --- */
+        .header {
+            margin-bottom: 50px;
+            text-align: center;
+        }
+        
+        .logo-wrapper {
+            margin-bottom: 24px;
+            animation: fadeIn 1s ease-out 0.3s backwards;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            background: var(--brand-gradient);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 32px;
+            color: white;
+            box-shadow: 0 0 40px var(--glow-color-1), 0 0 20px var(--glow-color-2);
+            position: relative;
+            overflow: hidden;
+            margin: 0 auto;
+            transition: transform 0.3s ease;
+        }
+        .logo:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        h1 {
+            font-family: 'Sora', sans-serif;
+            font-size: 42px;
+            font-weight: 800;
+            background: var(--brand-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 12px;
+            letter-spacing: -1px;
+            background-size: 200% auto;
+            animation: shimmerText 5s linear infinite, fadeIn 1s ease-out 0.4s backwards;
+        }
+        
+        @keyframes shimmerText {
+            to { background-position: 200% center; }
+        }
+
+        .subtitle {
+            color: var(--text-muted-color);
+            font-size: 16px;
+            font-weight: 500;
+            animation: fadeIn 1s ease-out 0.5s backwards;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Form Styling --- */
+        .form-section {
+            animation: fadeIn 1s ease-out 0.6s backwards;
+        }
+
+        .form-group {
+            margin-bottom: 32px;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 12px;
+            font-weight: 700;
+            font-size: 14px;
+            color: var(--text-color);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 16px 20px;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            font-size: 15px;
+            font-family: inherit;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            color: var(--text-color);
+            font-weight: 500;
+            position: relative;
+        }
+        
+        input::placeholder, textarea::placeholder {
+            color: var(--text-muted-color);
+            opacity: 0.8;
+        }
+
+        input:focus,
+        textarea:focus {
+            outline: none;
+            background: rgba(0,0,0,0.1);
+            box-shadow: 0 0 0 2px var(--glow-color-1), 0 0 20px var(--glow-color-1);
+            border-color: #3b82f6;
+            transform: translateY(-2px);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 160px;
+            line-height: 1.7;
+        }
+
+        .char-counter {
+            text-align: right;
+            font-size: 13px;
+            color: var(--text-muted-color);
+            margin-top: 8px;
+            font-weight: 600;
+        }
+        
+        .cache-status {
+            display: none;
+            margin-bottom: 28px;
+            padding: 16px 20px;
+            background: rgba(59, 130, 246, 0.1);
+            border-left: 4px solid #3b82f6;
+            border-radius: 12px;
+            font-size: 14px;
+            color: #bfdbfe;
+            font-weight: 600;
+            animation: slideInFromLeft 0.5s ease-out;
+        }
+        
+        @keyframes slideInFromLeft {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        /* --- Buttons & Interactive Elements --- */
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 32px;
+            padding: 16px 20px;
+            border-radius: 14px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .checkbox-group:hover {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #3b82f6;
+        }
+        .checkbox-group label { margin: 0; cursor: pointer; text-transform: none; }
+
+        .btn-group {
+            display: flex;
+            gap: 14px;
+            margin-top: 36px;
+            animation: fadeIn 1s ease-out 0.7s backwards;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 16px 32px;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 15px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+            background: var(--brand-gradient);
+            background-size: 200% auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-4px) scale(1.02);
+            box-shadow: 0 0 25px var(--glow-color-1), 0 0 45px var(--glow-color-2);
+            background-position: right center;
+        }
+
+        .btn:active { transform: translateY(-2px); }
+        .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-color);
+            flex: 0 0 auto;
+        }
+
+        .btn-secondary:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.2);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+        }
+        
+        /* --- Progress & Result --- */
+        .progress {
+            display: none;
+            margin-top: 40px;
+            text-align: center;
+            padding: 48px 40px;
+            background: var(--surface-color);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            animation: popIn 0.5s cubic-bezier(0.165, 0.84, 0.44, 1);
+        }
+        
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .spinner {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: conic-gradient(#3b82f6, #8b5cf6, #ec4899, #3b82f6);
+            animation: spin 1.5s linear infinite;
+            margin: 0 auto 24px;
+            position: relative;
+        }
+        .spinner::before {
+            content: '';
+            position: absolute;
+            inset: 6px;
+            background: var(--surface-color);
+            border-radius: 50%;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .progress-text {
+            color: var(--text-muted-color);
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .result {
+            display: none;
+            margin-top: 40px;
+            padding: 40px;
+            background: var(--surface-color);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+            animation: slideInFromBottom 0.8s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .result::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--brand-gradient);
+            background-size: 200% auto;
+            animation: shimmerBar 4s linear infinite;
+        }
+        @keyframes shimmerBar {
+            to { background-position: 200% center; }
+        }
+
+        .result.error {
+            border-left-color: #ef4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+        .result.error h3 { color: #f87171; }
+
+        .result h3 {
+            color: white;
+            margin-bottom: 24px;
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .result-content {
+            background: rgba(0,0,0,0.3);
+            padding: 24px;
+            border-radius: 12px;
+            color: var(--text-color);
+            line-height: 1.8;
+            white-space: pre-wrap;
+            font-size: 15px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 20px;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .copy-btn {
+            display: inline-block;
+            padding: 14px 28px;
+            background: var(--brand-gradient);
+            background-size: 200% auto;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-right: 12px;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .copy-btn:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 0 20px var(--glow-color-1);
+            background-position: right center;
+        }
+        
+        .btn-linkedin {
+            background: linear-gradient(135deg, #0A66C2, #0077b5);
+        }
+        .btn-linkedin:hover {
+            box-shadow: 0 0 20px rgba(10, 102, 194, 0.5);
+        }
+
+        .meta-info {
+            margin-top: 20px;
+            padding: 20px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 12px;
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--text-muted-color);
+            border: 1px solid var(--border-color);
+        }
+        .meta-info strong { color: #93c5fd; font-weight: 700; }
+
+        /* --- Responsive Design --- */
+        @media (max-width: 768px) {
+            .main-content { padding: 40px 28px; }
+            h1 { font-size: 32px; }
+            .subtitle { font-size: 15px; }
+            .btn-group { flex-direction: column; }
+            .btn-secondary { flex: 1; }
+            input, textarea { padding: 14px 16px; font-size: 16px; }
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 10px; }
+            .main-content { padding: 32px 20px; }
+            h1 { font-size: 28px; }
+            .logo { width: 70px; height: 70px; font-size: 28px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="celestial-background">
+        <div class="stars"></div>
+    </div>
+
+    <div class="container">
+        <div class="main-content">
+            <div class="header">
+                <div class="logo-wrapper">
+                    <div class="logo">in</div>
+                </div>
+                <h1>Celestial Post Generator</h1>
+                <p class="subtitle">Craft posts that resonate across the digital cosmos</p>
+            </div>
+
+            <div class="cache-status" id="cacheStatus"></div>
+
+            <form id="postForm" class="form-section">
+                <div class="form-group">
+                    <label for="profileUrl">LinkedIn Profile URL</label>
+                    <input
+                        type="url"
+                        id="profileUrl"
+                        placeholder="https://linkedin.com/in/your-profile"
+                        required
+                    />
+                </div>
+
+                <div class="form-group">
+                    <label for="profileName">Profile Name</label>
+                    <input
+                        type="text"
+                        id="profileName"
+                        placeholder="Your Name"
+                        required
+                    />
+                </div>
+
+                <div class="form-group">
+                    <label for="criteria">Post Generation Criteria</label>
+                    <textarea
+                        id="criteria"
+                        placeholder="Describe your ideal post: tone, key points, target audience, call to action..."
+                        maxlength="5000"
+                        required
+                    ></textarea>
+                    <div class="char-counter" id="charCounter">0 / 5000</div>
+                </div>
+
+                <div class="checkbox-group">
+                    <input type="checkbox" id="forceRefresh" />
+                    <label for="forceRefresh">Force refresh profile data from the network</label>
+                </div>
+
+                <div class="btn-group">
+                    <button type="submit" class="btn" id="generateBtn">Generate Post</button>
+                    <button type="button" class="btn btn-secondary" id="clearCacheBtn">Clear Cache</button>
+                </div>
+            </form>
+
+            <div class="progress" id="progress">
+                <div class="spinner"></div>
+                <div class="progress-text" id="progressText">Generating your post...</div>
+            </div>
+
+            <div class="result" id="result">
+                <h3 id="resultTitle">Your Generated Post</h3>
+                <div class="result-content" id="resultContent"></div>
+                <button class="copy-btn" id="copyBtn">Copy Text</button>
+                <button class="copy-btn btn-linkedin" id="linkedinBtn">Share on LinkedIn</button>
+                <div class="meta-info" id="metaInfo" style="display:none;"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- JavaScript remains unchanged as it handles the logic perfectly. ---
+        // --- The visual enhancements are all done via the CSS above. ---
+        
+        const API_BASE = "http://127.0.0.1:8000";
+
+        const form = document.getElementById('postForm');
+        const progress = document.getElementById('progress');
+        const progressText = document.getElementById('progressText');
+        const result = document.getElementById('result');
+        const resultContent = document.getElementById('resultContent');
+        const resultTitle = document.getElementById('resultTitle');
+        const generateBtn = document.getElementById('generateBtn');
+        const copyBtn = document.getElementById('copyBtn');
+        const linkedinBtn = document.getElementById('linkedinBtn');
+        const metaInfo = document.getElementById('metaInfo');
+        const cacheStatus = document.getElementById('cacheStatus');
+        const clearCacheBtn = document.getElementById('clearCacheBtn');
+        const forceRefreshCheckbox = document.getElementById('forceRefresh');
+        const profileUrlInput = document.getElementById('profileUrl');
+        const profileNameInput = document.getElementById('profileName');
+        const criteriaTextarea = document.getElementById('criteria');
+        const charCounter = document.getElementById('charCounter');
+
+        criteriaTextarea.addEventListener('input', () => {
+            const length = criteriaTextarea.value.length;
+            charCounter.textContent = `${length} / 5000`;
+        });
+
+        async function safeJson(resp) {
+            try {
+                return await resp.json();
+            } catch (e) {
+                return {
+                    success: false,
+                    error: 'Invalid server response',
+                    rawStatus: resp.status
+                };
+            }
+        }
+
+        window.addEventListener('load', async () => {
+            try {
+                const response = await fetch(`${API_BASE}/api/health`);
+                await safeJson(response);
+            } catch (error) {
+                console.error('Server connection failed:', error);
+                setTimeout(() => {
+                    alert('Cannot connect to server. Ensure Flask is running on port 8000.');
+                }, 1000);
+            }
+        });
+
+        async function checkCacheStatus() {
+            const profileUrl = profileUrlInput.value.trim();
+            const profileName = profileNameInput.value.trim();
+
+            if (!profileUrl || !profileName) {
+                cacheStatus.style.display = 'none';
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/api/cache-status`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ profileUrl, profileName })
+                });
+
+                const data = await safeJson(response);
+
+                if (data.success && data.cached) {
+                    cacheStatus.textContent = `Cached profile data found (${Number(data.cache_age_hours || 0).toFixed(1)}h old)`;
+                    cacheStatus.style.display = 'block';
+                } else {
+                    cacheStatus.style.display = 'none';
+                }
+            } catch (error) {
+                cacheStatus.style.display = 'none';
+            }
+        }
+
+        function debounce(func, wait) {
+            let timeout;
+            return function executedFunction(...args) {
+                const later = () => {
+                    clearTimeout(timeout);
+                    func(...args);
+                };
+                clearTimeout(timeout);
+                timeout = setTimeout(later, wait);
+            };
+        }
+
+        const debouncedCacheCheck = debounce(checkCacheStatus, 500);
+        profileUrlInput.addEventListener('input', debouncedCacheCheck);
+        profileNameInput.addEventListener('blur', checkCacheStatus);
+
+        clearCacheBtn.addEventListener('click', async () => {
+            const profileUrl = profileUrlInput.value.trim();
+            const profileName = profileNameInput.value.trim();
+
+            if (!profileUrl || !profileName) {
+                alert('Please enter a profile URL and name first.');
+                return;
+            }
+
+            if (!confirm(`Are you sure you want to clear the cached data for ${profileName}?`)) {
+                return;
+            }
+
+            clearCacheBtn.disabled = true;
+            clearCacheBtn.textContent = 'Clearing...';
+
+            try {
+                const response = await fetch(`${API_BASE}/api/clear-cache`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ profileUrl, profileName })
+                });
+
+                const data = await safeJson(response);
+
+                if (data.success) {
+                    alert(data.message);
+                    checkCacheStatus();
+                } else {
+                    alert('Error: ' + (data.error || 'An unknown error occurred.'));
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            } finally {
+                clearCacheBtn.disabled = false;
+                clearCacheBtn.textContent = 'Clear Cache';
+            }
+        });
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const profileUrl = profileUrlInput.value.trim();
+            const profileName = profileNameInput.value.trim();
+            const criteria = criteriaTextarea.value.trim();
+            const forceRefresh = forceRefreshCheckbox.checked;
+
+            if (!profileUrl || !profileName || !criteria) {
+                alert('Please fill out all required fields.');
+                return;
+            }
+
+            generateBtn.disabled = true;
+            generateBtn.textContent = 'Generating...';
+
+            progressText.textContent = forceRefresh
+                ? 'Scraping fresh profile data...'
+                : 'Crafting your post...';
+
+            progress.style.display = 'block';
+            result.style.display = 'none';
+            result.classList.remove('error');
+            metaInfo.style.display = 'none';
+
+            try {
+                const response = await fetch(`${API_BASE}/api/generate`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        profileUrl,
+                        profileName,
+                        criteria,
+                        forceRefresh
+                    })
+                });
+
+                const data = await safeJson(response);
+
+                progress.style.display = 'none';
+                generateBtn.disabled = false;
+                generateBtn.textContent = 'Generate Post';
+
+                if (response.ok && data.success) {
+                    resultTitle.textContent = 'Your Generated Post';
+                    resultContent.textContent = data.post || 'Post generated successfully.';
+                    result.style.display = 'block';
+
+                    if (data.meta) {
+                        let metaText = '';
+                        if (data.meta.used_cache !== undefined) {
+                            metaText += data.meta.used_cache
+                                ? `✨ Generated from cached data (${Number(data.meta.cache_age_hours || 0).toFixed(1)}h old)<br>`
+                                : '✨ Generated from freshly scraped data<br>';
+                        }
+                        if (data.meta.model) {
+                            metaText += `🤖 Model Used: <strong>${data.meta.model}</strong><br>`;
+                        }
+                        if (data.meta.generation_time) {
+                            metaText += `⏱️ Generation time: <strong>${Number(data.meta.generation_time).toFixed(2)}s</strong>`;
+                        }
+                        if (metaText) {
+                            metaInfo.innerHTML = metaText;
+                            metaInfo.style.display = 'block';
+                        }
+                    }
+
+                    result.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                } else {
+                    resultTitle.textContent = 'An Error Occurred';
+                    const message = data.error || 'Unknown error';
+                    const details = data.details || '';
+                    resultContent.textContent = message + (details ? '\n\n' + details : '');
+                    result.classList.add('error');
+                    result.style.display = 'block';
+                }
+            } catch (error) {
+                progress.style.display = 'none';
+                generateBtn.disabled = false;
+                generateBtn.textContent = 'Generate Post';
+                alert('A network error occurred. Please ensure the server is running and accessible.');
+            }
+        });
+
+        copyBtn.addEventListener('click', async () => {
+            try {
+                await navigator.clipboard.writeText(resultContent.textContent);
+                const originalText = copyBtn.textContent;
+                copyBtn.textContent = 'Copied!';
+                copyBtn.style.background = 'linear-gradient(135deg, #10b981, #34d399)';
+
+                setTimeout(() => {
+                    copyBtn.textContent = originalText;
+                    copyBtn.style.background = ''; // Revert to original gradient
+                }, 2000);
+            } catch (e) {
+                alert('Failed to copy text to clipboard.');
+            }
+        });
+
+        linkedinBtn.addEventListener('click', () => {
+            const text = resultContent.textContent || '';
+            const url = `https://www.linkedin.com/sharing/share-offsite/?mini=true&url=${encodeURIComponent('')}&summary=${encodeURIComponent(text)}`;
+            window.open(url, '_blank', 'width=600,height=600');
+        });
+    </script>
+</body>
+</html>
